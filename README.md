@@ -20,3 +20,9 @@ The simulation provides an interactive way to visualize and understand the compl
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/ai-government-simulation.git
+
+2. Run a local server (Python is used for this example)
+  ```bash
+   python3python3 -m http.server 8000
+
+     
