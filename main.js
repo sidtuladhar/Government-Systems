@@ -1,4 +1,4 @@
-let openai_api_proxy = "https://zest-quiet-phalange.glitch.me/";
+let openai_api_proxy = config.API_URL;
 let currentTurn = 0;
 let maxTurns = 2;
 let stage = "Legislative-Debate"; // Legislative-Vote, Executive-Debate, Executive-Vote, Judicial-Amend, Judicial-Vote
@@ -136,9 +136,12 @@ function respondToProposal(agents) {
     }
     return;
   }
-
-
-  let agentIndex = (startingAgentIndex + currentTurn) % agents.length;
+  let agentIndex;
+  if (stage === "Legislative-Debate") {
+    agentIndex = (startingAgentIndex + currentTurn) % agents.length;
+  } else {
+    agentIndex = currentTurn % agents.length;
+  }
   let agent = agents[agentIndex];
   // console.log(currentTurn, maxTurns, agents.length, agent);
   const budgetInfo = policies[policies.length - 1].budget
