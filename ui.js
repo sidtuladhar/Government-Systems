@@ -20,7 +20,7 @@ function drawProposal() {
   let latestProposal = policies[policies.length - 1];
   
   // Define positioning and dimensions
-  let x = 50;
+  let x = 500;
   let y = 50;
   let boxWidth = 850;
   let boxHeight = 250;
@@ -51,8 +51,14 @@ function drawProposal() {
   textStyle(NORMAL);
   text(`Expected Impact:`, x + 10, y + 90);
   textSize(14);
+  let impactsY = y + 120; // Starting Y position for impacts
   for (let i = 0; i < latestProposal.expectedImpact.length; i++) {
-    text(`• ${latestProposal.expectedImpact[i]}`, x + 20, y + 120 + i * 20);
+    impactsY += drawWrappedText(
+      `• ${latestProposal.expectedImpact[i]}`,
+      x + 20, // X position with some margin
+      impactsY, // Current Y position
+      y + 800
+    );
   }
   
   // Display Status
@@ -110,7 +116,6 @@ function drawAgents(agents) {
       imageMode(CENTER);
       image(img, agent.x, agent.y, 50, 50); // Adjust size as needed
     } else {
-      // Fallback in case no image is found for the role
       fill(agent.col);
       ellipse(agent.x, agent.y, 50, 50);
     }
@@ -119,7 +124,7 @@ function drawAgents(agents) {
     fill(0);
     textAlign(CENTER, CENTER);
     if (stage == "Legislative-Debate" || stage === "Legislative-Vote") {
-      textSize(16);
+      textSize(18);
       textStyle(BOLD);
       text(agent.name, agent.x, agent.y - 50);
     } else {
@@ -174,10 +179,10 @@ function drawAgents(agents) {
           textAlign(LEFT, TOP);
           if (stage === "Executive-Debate" || stage === "Judicial-Debate") {
             textSize(15);
-            text(agent.displayedContent, agent.x - 75,agent.y + 55, 180, 250)
+            text(agent.displayedContent, agent.x - 100, agent.y + 80, 180, 250)
           } else {
             textSize(12);
-            text(agent.displayedContent, agent.x - 80,agent.y + 55, 175, 250);
+            text(agent.displayedContent, agent.x - 90, agent.y + 65, 200, 250);
           }
         }
       }  
@@ -254,3 +259,4 @@ function getRandomInt(min, max) {
   max = Math.floor(max); // Ensure max is rounded down
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+

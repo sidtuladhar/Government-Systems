@@ -24,5 +24,3 @@ The simulation provides an interactive way to visualize and understand the compl
 2. Run a local server (Python is used for this example)
   ```bash
    python3 -m http.server 8000
-
-     

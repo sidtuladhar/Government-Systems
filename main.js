@@ -29,6 +29,8 @@ function setup() {
 
 function draw() {
   background(curBackground);
+  
+  drawRecentPassedPolicies(policies);
   textFont(curFont);
   drawProposal();
   
@@ -61,6 +63,8 @@ function draw() {
       }
     }
   }
+
+
 }
 
 function respondToProposal(agents) {
