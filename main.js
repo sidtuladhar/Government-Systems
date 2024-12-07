@@ -4,6 +4,8 @@ let maxTurns = 2;
 let stage = "Legislative-Debate"; // Legislative-Vote, Executive-Debate, Executive-Vote, Judicial-Amend, Judicial-Vote
 let roleImages = {};
 let startingAgentIndex = Math.floor(Math.random() * LegislativeAgents.length);
+let legislative_img, executive_img, judicial_img;
+let legislative_graphic, executive_graphic, judicial_graphic;
 
 function preload() {
   roleImages["Leader"] = loadImage("images/leader.svg");
@@ -13,12 +15,15 @@ function preload() {
   roleImages["President"] = loadImage("images/president.svg");
   roleImages["Defense"] = loadImage("images/defense.svg");
   roleImages["Judge"] = loadImage("images/scale.svg");
-
   policyImage = loadImage("images/policy.svg");
-}
-function setup() {
-  createCanvas(3700, 1200);
 
+  legislative_img = loadImage("images/legislative.png");
+  executive_img = loadImage("images/executive.png");
+  judicial_img = loadImage("images/judicial.png");
+}
+
+function setup() {
+  createCanvas(2000, 1200);
   policyPos = createVector(
     LegislativeAgents[(LegislativeAgents[0].x, LegislativeAgents[0].y)],
   );
@@ -27,21 +32,47 @@ function setup() {
   startDebate(LegislativeAgents[0]);
   console.log("Starting...");
   drawProposal();
+  legislative_graphic = createGraphics(
+    legislative_img.width,
+    legislative_img.height,
+  );
+  executive_graphic = createGraphics(executive_img.width, executive_img.height);
+  judicial_graphic = createGraphics(judicial_img.width, judicial_img.height);
+
+  legislative_graphic.noStroke();
+  executive_graphic.noStroke();
+  judicial_graphic.noStroke();
+
+  legislative_graphic.fill(255);
+  executive_graphic.fill(255);
+  judicial_graphic.fill(255);
+
+  legislative_graphic.rect(
+    0,
+    0,
+    legislative_img.width,
+    legislative_img.height,
+    25,
+  );
+  executive_graphic.rect(0, 0, executive_img.width, executive_img.height, 25);
+  judicial_graphic.rect(0, 0, judicial_img.width, judicial_img.height, 25);
 }
 
 function draw() {
   background(curBackground);
-
   drawRecentPassedPolicies(policies);
   textFont(curFont);
   drawProposal();
 
   if (stage === "Legislative-Debate" || stage === "Legislative-Vote") {
     drawAgents(LegislativeAgents);
+    drawBanner(legislative_img, legislative_graphic);
   } else if (stage === "Executive-Debate" || stage === "Executive-Vote") {
     drawAgents(ExecutiveAgents);
+    drawBanner(executive_img, executive_graphic);
   } else if (stage === "Judicial-Debate" || stage === "Judicial-Vote") {
     drawAgents(JudicialAgent);
+    drawBanner(judicial_img, judicial_graphic);
   }
 
   imageMode(CENTER);
@@ -59,8 +90,10 @@ function draw() {
         curBackground = "#4169E1";
       } else if (stage === "Executive-Debate") {
         curBackground = "#228B22";
+        drawBanner(executive_img);
       } else if (stage === "Legislative-Debate") {
         curBackground = "#A9A9A9";
+        drawBanner(judicial_img);
       }
     }
   }

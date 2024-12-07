@@ -207,12 +207,12 @@ function parseProposal(proposalText, agent) {
 
 function drawRecentPassedPolicies(policies) {
   let passedPolicies = policies.filter((p) => p.status === "Passed");
-  passedPolicies = passedPolicies.slice(-3);
+  passedPolicies = passedPolicies.slice(-1);
   textFont("Arial");
   textAlign(LEFT, TOP);
   noStroke();
 
-  let x = 50; // Starting X position
+  let x = 900; // Starting X position
   let y = 50; // Starting Y position
   let cardWidth = 400;
   let spacing = 20;
@@ -246,14 +246,13 @@ function drawRecentPassedPolicies(policies) {
     fill(255); // White text
     textSize(18);
     textStyle(BOLD);
-    drawWrappedText(policy.title, x + 10, y + 10, cardWidth - 20); // Wrapped title/
-
+    drawWrappedText(policy.title, x + 10, y + 10, cardWidth - 20, 14);
     fill(0);
     textSize(16);
     textStyle(BOLD);
     text("Objective:", x + 10, y + 50);
     textStyle(ITALIC);
-    drawWrappedText(policy.objective, x + 120, y + 50, cardWidth - 130); // Wrapped text
+    drawWrappedText(policy.objective, x + 120, y + 50, cardWidth - 130, 14);
 
     textStyle(BOLD);
     text("Expected Impacts:", x + 10, y + 80 + objectiveHeight);
@@ -261,10 +260,11 @@ function drawRecentPassedPolicies(policies) {
     let impactsY = y + 100 + objectiveHeight;
     for (let j = 0; j < policy.expectedImpact.length; j++) {
       impactsY += drawWrappedText(
-        `- ${policy.expectedImpact[j]}`,
+        `• ${policy.expectedImpact[j]}`,
         x + 20,
         impactsY,
         cardWidth - 40,
+        14,
       );
     }
     y += cardHeight + spacing;
@@ -275,7 +275,7 @@ function drawRecentPassedPolicies(policies) {
   textSize(20);
   textStyle(BOLDITALIC);
   textAlign(LEFT);
-  text("Recent Passed Policies", x + 50, 20);
+  text("Recently Passed Policy", x + 80, 20);
 }
 
 function textHeight(txt, wrapWidth) {
@@ -298,8 +298,8 @@ function textHeight(txt, wrapWidth) {
 }
 
 // Function to draw wrapped text
-function drawWrappedText(txt, x, y, wrapWidth) {
-  textSize(14);
+function drawWrappedText(txt, x, y, wrapWidth, size) {
+  textSize(size);
   let words = txt.split(" ");
   let line = "";
   let lineHeight = 20; // Approximate line height

@@ -15,63 +15,96 @@ function drawProposal() {
     return; // Nothing to draw
   }
 
+  fill(0);
+  noStroke();
+  textSize(18);
+  textAlign(LEFT, TOP);
+
   // Get the most recent proposal
   let latestProposal = policies[policies.length - 1];
 
-  // Define positioning and dimensions
-  let x = 500;
-  let y = 50;
-  let boxWidth = 850;
-  let boxHeight = 250;
+  let x = 900;
+  let y = 430;
+  let boxWidth = 400;
+  let boxHeight = 550;
 
-  // Draw a rectangle as the background for the proposal
-  fill(240);
-  stroke(0);
   if (latestProposal.budget) {
     rect(x, y, boxWidth, boxHeight + 25);
   } else {
     rect(x, y, boxWidth, boxHeight, 10);
   }
 
-  // Set text properties
-  fill(0);
+  let titleHeight = textHeight(latestProposal.title, boxWidth - 20);
+  let objectiveHeight = textHeight(latestProposal.objective, boxWidth - 20);
+  let impactsHeight = latestProposal.expectedImpact.reduce(
+    (acc, impact) => acc + textHeight(impact, boxWidth - 40),
+    0,
+  );
+  let cardHeight = 100 + titleHeight + objectiveHeight + impactsHeight;
+
+  // Draw card with shadow
   noStroke();
-  textSize(16);
-  textAlign(LEFT, TOP);
+  fill(200, 200, 200, 150); // Shadow effect
+  rect(x + 5, y + 5, boxWidth, boxHeight, 10); // Shadow offset
+  fill(255); // Card background
+  stroke(150); // Light gray border
+  strokeWeight(1);
+  rect(x, y, boxWidth, boxHeight, 10); // Card with rounded corners
 
-  // Display Title
+  let party = latestProposal.party.toLowerCase().split(/\s+/);
+
+  if (party.includes("republican")) {
+    fill("#8B0000");
+  } else if (party.includes("democratic")) {
+    fill("#003366");
+  } else {
+    fill("#013220");
+  }
+  noStroke();
+  rect(x, y, boxWidth, 65, 10, 10, 0, 0); // Header background
+  fill(255); // White text
+  textSize(18);
   textStyle(BOLD);
-  text(`${latestProposal.title}`, x + 10, y + 15);
+  text(`${latestProposal.title}`, x + 10, y + 15, boxWidth - 20);
 
-  // Display Objective
+  fill(0);
   textStyle(ITALIC);
-  text(`Objective: ${latestProposal.objective}`, x + 10, y + 40, 800);
+  text(`Objective:`, x + 10, y + 80);
+  drawWrappedText(
+    latestProposal.objective,
+    x + 120,
+    y + 80,
+    boxWidth - 130,
+    16,
+  );
 
+  textSize(18);
+  textStyle(BOLD);
+  text(`Expected Impact:`, x + 10, y + 130 + objectiveHeight);
   textStyle(NORMAL);
-  text(`Expected Impact:`, x + 10, y + 90);
-  textSize(14);
-  let impactsY = y + 120; // Starting Y position for impacts
+  let impactsY = y + 160 + objectiveHeight; // Starting Y position for impacts
   for (let i = 0; i < latestProposal.expectedImpact.length; i++) {
     impactsY += drawWrappedText(
       `• ${latestProposal.expectedImpact[i]}`,
       x + 20, // X position with some margin
       impactsY, // Current Y position
-      y + 800,
+      boxWidth - 40,
+      16,
     );
+    impactsY += 10;
   }
 
   // Display Status
-  textSize(14);
+  textSize(15);
   fill(getStatusColor(latestProposal.status));
   text(`Status: ${latestProposal.status}`, x + 10, y + boxHeight - 50);
 
   // Display Party
-  textSize(14);
   fill(getStatusColor(latestProposal.party));
   text(`Proposed By: ${latestProposal.party}`, x + 10, y + boxHeight - 30);
 
   if (latestProposal.budget) {
-    textSize(14);
+    textSize(16);
     text(`Budget: `, x + 10, y + boxHeight - 10);
 
     fill(255, 0, 0); // Red
@@ -123,7 +156,6 @@ function drawAgents(agents) {
       ellipse(agent.x, agent.y, 50, 50);
     }
 
-    // Draw agent name
     fill(0);
     textAlign(CENTER, CENTER);
     if (stage == "Legislative-Debate" || stage === "Legislative-Vote") {
@@ -185,7 +217,7 @@ function drawAgents(agents) {
           textAlign(LEFT, TOP);
           if (stage === "Executive-Debate" || stage === "Judicial-Debate") {
             textSize(15);
-            text(agent.displayedContent, agent.x - 100, agent.y + 80, 180, 250);
+            text(agent.displayedContent, agent.x - 90, agent.y + 80, 180, 300);
           } else {
             textSize(12);
             text(agent.displayedContent, agent.x - 90, agent.y + 65, 200, 250);
@@ -263,4 +295,15 @@ function getRandomInt(min, max) {
   min = Math.ceil(min); // Ensure min is rounded up
   max = Math.floor(max); // Ensure max is rounded down
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function drawBanner(banner, graphic) {
+  let rectX = 50; // X-coordinate of the rectangle
+  let rectY = 39; // Y-coordinate of the rectangle
+  let rectWidth = 850; // Width of the rectangle
+  let rectHeight = 277; // Height of the rectangle
+
+  // Apply the mask to the image
+  banner.mask(graphic);
+  image(banner, rectX + 400, rectY + 150, rectWidth, rectHeight);
 }
