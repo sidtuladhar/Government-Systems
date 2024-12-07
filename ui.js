@@ -84,10 +84,16 @@ function drawProposal() {
 
   if (latestProposal.budget) {
     textSize(18);
-    text(`Budget: `, x + 10, y + boxHeight - 10);
+    text(`Budget: `, x + 10, impactsY + 5);
 
     fill(255, 0, 0); // Red
-    text(`${latestProposal.budget}`, x + 65, y + boxHeight - 10); // Adjust x for positioning
+    drawWrappedText(
+      `${latestProposal.budget}`,
+      x + 80,
+      impactsY + 5,
+      boxWidth - 40,
+      18,
+    ); // Adjust x for positioning
   }
 
   // Display Status
