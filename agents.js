@@ -90,7 +90,7 @@ let ExecutiveAgents = [
     name: "President",
     role: "President",
     party: "Republican",
-    x: 500,
+    x: 450,
     y: 450,
     messages: [],
     col: "#36454F",
@@ -219,9 +219,9 @@ function initializeAgents(agents) {
           Guidelines:
           - Give a risk assessment by categorizing the risk as:
 
-          ‼️LOW SECURITY RISK‼️ 
-          ‼️‼️MEDIUM RISK‼️ ‼️
-          ‼️‼️‼️HIGH RISK‼️‼️‼️
+          ‼️LOW RISK‼️ 
+          ‼️MEDIUM RISK‼️
+          ‼️ HIGH RISK‼️
 
           Then give your reason for the risk. (20 words or less)`,
       });

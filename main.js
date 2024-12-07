@@ -359,6 +359,6 @@ function gotResults(results, params, agent) {
   } else if (stage === "Judicial-Debate") {
     setTimeout(() => {
       respondToProposal(JudicialAgent);
-    }, 7000);
+    }, 10000);
   }
 }

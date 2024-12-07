@@ -28,19 +28,7 @@ function drawProposal() {
   let boxWidth = 400;
   let boxHeight = 550;
 
-  if (latestProposal.budget) {
-    rect(x, y, boxWidth, boxHeight + 25);
-  } else {
-    rect(x, y, boxWidth, boxHeight, 10);
-  }
-
-  let titleHeight = textHeight(latestProposal.title, boxWidth - 20);
   let objectiveHeight = textHeight(latestProposal.objective, boxWidth - 20);
-  let impactsHeight = latestProposal.expectedImpact.reduce(
-    (acc, impact) => acc + textHeight(impact, boxWidth - 40),
-    0,
-  );
-  let cardHeight = 100 + titleHeight + objectiveHeight + impactsHeight;
 
   // Draw card with shadow
   noStroke();
@@ -94,6 +82,14 @@ function drawProposal() {
     impactsY += 10;
   }
 
+  if (latestProposal.budget) {
+    textSize(18);
+    text(`Budget: `, x + 10, y + boxHeight - 10);
+
+    fill(255, 0, 0); // Red
+    text(`${latestProposal.budget}`, x + 65, y + boxHeight - 10); // Adjust x for positioning
+  }
+
   // Display Status
   textSize(15);
   fill(getStatusColor(latestProposal.status));
@@ -102,14 +98,6 @@ function drawProposal() {
   // Display Party
   fill(getStatusColor(latestProposal.party));
   text(`Proposed By: ${latestProposal.party}`, x + 10, y + boxHeight - 30);
-
-  if (latestProposal.budget) {
-    textSize(16);
-    text(`Budget: `, x + 10, y + boxHeight - 10);
-
-    fill(255, 0, 0); // Red
-    text(`${latestProposal.budget}`, x + 65, y + boxHeight - 10); // Adjust x for positioning
-  }
 
   fill(100);
   textSize(12);
