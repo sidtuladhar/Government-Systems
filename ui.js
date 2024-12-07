@@ -1,53 +1,52 @@
 let policyPos, targetPos;
 let policyImage; // Policy SVG image
 let isAnimating = false; // Flag to control animation
-let animationProgress = 0; 
+let animationProgress = 0;
 let transitionStartTime = null;
 let updateBackground = null;
-let curBackground = '#A9A9A9';
+let curBackground = "#A9A9A9";
 let typingSpeed = 10;
-let curFont = 'monospace';
-
+let curFont = "monospace";
 
 function drawProposal() {
   // Check if there are any policies to display
-  textFont('Arial');
+  textFont("Arial");
   if (policies.length === 0) {
     return; // Nothing to draw
   }
-  
+
   // Get the most recent proposal
   let latestProposal = policies[policies.length - 1];
-  
+
   // Define positioning and dimensions
   let x = 500;
   let y = 50;
   let boxWidth = 850;
   let boxHeight = 250;
-  
+
   // Draw a rectangle as the background for the proposal
   fill(240);
   stroke(0);
   if (latestProposal.budget) {
-  rect(x, y, boxWidth, boxHeight + 25);
+    rect(x, y, boxWidth, boxHeight + 25);
   } else {
-  rect(x, y, boxWidth, boxHeight, 10);
+    rect(x, y, boxWidth, boxHeight, 10);
   }
-  
+
   // Set text properties
   fill(0);
   noStroke();
   textSize(16);
   textAlign(LEFT, TOP);
-  
+
   // Display Title
   textStyle(BOLD);
   text(`${latestProposal.title}`, x + 10, y + 15);
-  
+
   // Display Objective
   textStyle(ITALIC);
   text(`Objective: ${latestProposal.objective}`, x + 10, y + 40, 800);
-  
+
   textStyle(NORMAL);
   text(`Expected Impact:`, x + 10, y + 90);
   textSize(14);
@@ -57,15 +56,15 @@ function drawProposal() {
       `• ${latestProposal.expectedImpact[i]}`,
       x + 20, // X position with some margin
       impactsY, // Current Y position
-      y + 800
+      y + 800,
     );
   }
-  
+
   // Display Status
   textSize(14);
   fill(getStatusColor(latestProposal.status));
   text(`Status: ${latestProposal.status}`, x + 10, y + boxHeight - 50);
-  
+
   // Display Party
   textSize(14);
   fill(getStatusColor(latestProposal.party));
@@ -81,7 +80,11 @@ function drawProposal() {
 
   fill(100);
   textSize(12);
-  text(`Proposal #${latestProposal.index}`, x + boxWidth - 100, y + boxHeight - 30);
+  text(
+    `Proposal #${latestProposal.index}`,
+    x + boxWidth - 100,
+    y + boxHeight - 30,
+  );
   textFont(curFont);
 }
 
@@ -102,13 +105,13 @@ function drawAgents(agents) {
 
     if (stage == "Legislative-Debate" || stage === "Legislative-Vote") {
       ellipse(agent.x, agent.y, 70, 70);
-      curFont = textFont('monospace');
-    } else if (stage === "Executive-Debate"){
+      curFont = textFont("monospace");
+    } else if (stage === "Executive-Debate") {
       ellipse(agent.x, agent.y, 100, 100);
-      curFont = textFont('Times New Roman');
+      curFont = textFont("Times New Roman");
     } else {
       ellipse(agent.x, agent.y, 100, 100);
-      curFont = textFont('serif');
+      curFont = textFont("serif");
     }
 
     let img = roleImages[agent.role];
@@ -137,17 +140,20 @@ function drawAgents(agents) {
       let lastAssistantMessage = getLastAssistantMessage(agent.messages);
 
       if (lastAssistantMessage) {
-        // Extract the content before '**Proposal**' or '**Budget**'
-        let contentBeforeProposal = extractContentBeforeMarker(lastAssistantMessage.content, '**Proposal**');
-        let contentBeforeBudget = extractContentBeforeMarker(lastAssistantMessage.content, '**Budget**');
+        let contentBeforeProposal = extractContentBeforeMarker(
+          lastAssistantMessage.content,
+          "**Proposal**",
+        );
+        let contentBeforeBudget = extractContentBeforeMarker(
+          lastAssistantMessage.content,
+          "**Budget**",
+        );
         let contentToDisplay;
 
-        if (lastAssistantMessage.content.includes('**Proposal**')) {
-          // Handle content before **Proposal** only if it exists
-          contentToDisplay = contentBeforeProposal.length > 0
-            ? contentBeforeProposal
-            : ""; // Ensure we don't fall back to contentBeforeBudget
-        } else if (lastAssistantMessage.content.includes('**Budget**')) {
+        if (lastAssistantMessage.content.includes("**Proposal**")) {
+          contentToDisplay =
+            contentBeforeProposal.length > 0 ? contentBeforeProposal : ""; // Ensure we don't fall back to contentBeforeBudget
+        } else if (lastAssistantMessage.content.includes("**Budget**")) {
           // Handle content before **Budget**
           contentToDisplay = contentBeforeBudget;
         } else {
@@ -179,26 +185,25 @@ function drawAgents(agents) {
           textAlign(LEFT, TOP);
           if (stage === "Executive-Debate" || stage === "Judicial-Debate") {
             textSize(15);
-            text(agent.displayedContent, agent.x - 100, agent.y + 80, 180, 250)
+            text(agent.displayedContent, agent.x - 100, agent.y + 80, 180, 250);
           } else {
             textSize(12);
             text(agent.displayedContent, agent.x - 90, agent.y + 65, 200, 250);
           }
         }
-      }  
+      }
     }
   }
 }
 
 function animatePolicy() {
   if (animationProgress < 1) {
-
     if (stage === "Executive-Debate" || stage === "Judicial-Debate") {
-    policyPos.x = lerp(policyPos.x, targetPos.x + 12, 0.1);
-    policyPos.y = lerp(policyPos.y, targetPos.y - 5, 0.1);
+      policyPos.x = lerp(policyPos.x, targetPos.x + 12, 0.1);
+      policyPos.y = lerp(policyPos.y, targetPos.y - 5, 0.1);
     } else {
-    policyPos.x = lerp(policyPos.x, targetPos.x, 0.1);
-    policyPos.y = lerp(policyPos.y, targetPos.y, 0.1);
+      policyPos.x = lerp(policyPos.x, targetPos.x, 0.1);
+      policyPos.y = lerp(policyPos.y, targetPos.y, 0.1);
     }
     animationProgress += 0.02; // Adjust speed here
   } else {
@@ -239,7 +244,7 @@ function smoothBackgroundTo(startHex, endHex, duration) {
 }
 
 function extractContentBeforeMarker(message, marker) {
-  const proposalMarker = marker; 
+  const proposalMarker = marker;
   const markerIndex = message.indexOf(proposalMarker);
 
   if (markerIndex === -1) {
@@ -259,4 +264,3 @@ function getRandomInt(min, max) {
   max = Math.floor(max); // Ensure max is rounded down
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-

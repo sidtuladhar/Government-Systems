@@ -2,16 +2,46 @@ let policies = [
   {
     index: 1,
     title: "Tax Relief for Middle-Class Families",
-    objective: "To reduce the tax burden on middle-class families by increasing the standard deduction to $25,000 and maintaining a flat tax rate.",
+    objective:
+      "To reduce the tax burden on middle-class families by increasing the standard deduction to $25,000 and maintaining a flat tax rate.",
     party: "Party A",
     expectedImpact: [
       "Increase in disposable income for over 75 million households.",
       "Boost consumer spending by approximately 15% within the first year, providing greater support for local businesses.",
-      "Generate around 500,000 new jobs, particularly in sustainable sectors to promote long-term growth."
+      "Generate around 500,000 new jobs, particularly in sustainable sectors to promote long-term growth.",
     ],
     budget: "$1.2B",
-    status: "Passed"
-  }
+    status: "Passed",
+  },
+  {
+    index: 2,
+    title: "Clean Energy Future Initiative",
+    title: "Tax Relief for Middle-Class Families",
+    objective:
+      "To reduce the tax burden on middle-class families by increasing the standard deduction to $25,000 and maintaining a flat tax rate.",
+    party: "Party A",
+    expectedImpact: [
+      "Increase in disposable income for over 75 million households.",
+      "Boost consumer spending by approximately 15% within the first year, providing greater support for local businesses.",
+      "Generate around 500,000 new jobs, particularly in sustainable sectors to promote long-term growth.",
+    ],
+    budget: "$1.2B",
+    status: "Passed",
+  },
+  {
+    index: 3,
+    title: "Tax Relief for Middle-Class Families",
+    objective:
+      "To reduce the tax burden on middle-class families by increasing the standard deduction to $25,000 and maintaining a flat tax rate.",
+    party: "Party A",
+    expectedImpact: [
+      "Increase in disposable income for over 75 million households.",
+      "Boost consumer spending by approximately 15% within the first year, providing greater support for local businesses.",
+      "Generate around 500,000 new jobs, particularly in sustainable sectors to promote long-term growth.",
+    ],
+    budget: "$1.2B",
+    status: "Passed",
+  },
 ];
 
 let proposal = {
@@ -25,12 +55,12 @@ let proposal = {
 };
 
 function parseProposal(proposalText, agent) {
-  if (typeof proposalText !== 'string') {
-    console.error('Error: proposalText must be a string.');
+  if (typeof proposalText !== "string") {
+    console.error("Error: proposalText must be a string.");
     return;
   }
 
-  const proposalMarker = '**Proposal**';
+  const proposalMarker = "**Proposal**";
   const markerIndex = proposalText.indexOf(proposalMarker);
   const budgetRegex = /\*\*Budget\*\*\s*([^\n]+)/;
   const budgetIndex = proposalText.match(budgetRegex);
@@ -40,40 +70,46 @@ function parseProposal(proposalText, agent) {
       const budget = budgetIndex[1].trim();
       let prevProposal = policies[policies.length - 1];
       let newProposal = {
-      index: policies.length, // Unique identifier
-      title: prevProposal.title,
-      objective: prevProposal.objective,
-      party: prevProposal.party,
-      expectedImpact: prevProposal.expectedImpact,
-      budget: budget,
-      status: "Pending Executive Decision"
+        index: policies.length, // Unique identifier
+        title: prevProposal.title,
+        objective: prevProposal.objective,
+        party: prevProposal.party,
+        expectedImpact: prevProposal.expectedImpact,
+        budget: budget,
+        status: "Pending Executive Decision",
       };
       policies.pop();
       policies.push(newProposal);
     } else {
-    console.warn("Warning: No '**Proposal**' section found in the text.");
-    } 
+      console.warn("Warning: No '**Proposal**' section found in the text.");
+    }
     return;
   }
 
   // 4. Extract the text after '**Proposal**'
-  const extractedText = proposalText.substring(markerIndex + proposalMarker.length).trim();
+  const extractedText = proposalText
+    .substring(markerIndex + proposalMarker.length)
+    .trim();
 
   // 5. Split the extracted text into lines
-  const lines = extractedText.split('\n');
+  const lines = extractedText.split("\n");
 
   // 6. Initialize a new proposal object
   let newProposal = {
-      index: policies.length + 1, // Unique identifier
-      title: "",
-      objective: "",
-      party: agent.name,
-      expectedImpact: [],
-      budget: "",
-      status: "Pending Legislative Decision", // Possible values: "Pending", "Passed", "Rejected"
-   };
+    index: policies.length + 1, // Unique identifier
+    title: "",
+    objective: "",
+    party: agent.name,
+    expectedImpact: [],
+    budget: "",
+    status: "Pending Legislative Decision", // Possible values: "Pending", "Passed", "Rejected"
+  };
 
-  if (agent.role !== "Legislator" && agent.role !== "Leader" && agent.role !== "Swing Legislator") {
+  if (
+    agent.role !== "Legislator" &&
+    agent.role !== "Leader" &&
+    agent.role !== "Swing Legislator"
+  ) {
     newProposal.party = policies[policies.length - 1].party;
   }
 
@@ -91,49 +127,49 @@ function parseProposal(proposalText, agent) {
     let titleMatch = line.match(titleRegex);
     if (titleMatch) {
       newProposal.title = titleMatch[1].trim();
-      currentSection = 'Title';
+      currentSection = "Title";
       continue;
     }
 
     let objectiveMatch = line.match(objectiveRegex);
     if (objectiveMatch) {
       newProposal.objective = objectiveMatch[1].trim();
-      currentSection = 'Objective';
+      currentSection = "Objective";
       continue;
     }
-    
+
     let budgetMatch = line.match(budgetRegex);
     if (budgetMatch) {
       newProposal.budget = budgetMatch[1].trim();
-      currentSection = 'Budget';
+      currentSection = "Budget";
       continue;
     }
 
     if (expectedImpactRegex.test(line)) {
-      currentSection = 'ExpectedImpact';
+      currentSection = "ExpectedImpact";
       continue;
     }
 
     // Extract data based on the current section
-    if (currentSection === 'Title') {
-      if (line !== '') {
-        newProposal.title += ' ' + line;
+    if (currentSection === "Title") {
+      if (line !== "") {
+        newProposal.title += " " + line;
       }
-    } else if (currentSection === 'Objective') {
-      if (line !== '') {
-        newProposal.objective += ' ' + line;
+    } else if (currentSection === "Objective") {
+      if (line !== "") {
+        newProposal.objective += " " + line;
       }
-    } else if (currentSection === 'ExpectedImpact') {
-      if (line.startsWith('-')) {
-        let impact = line.replace('-', '').trim();
+    } else if (currentSection === "ExpectedImpact") {
+      if (line.startsWith("-")) {
+        let impact = line.replace("-", "").trim();
         newProposal.expectedImpact.push(impact);
       }
-    } else if (currentSection === 'Budget') {
-      if (line !== '') {
-        newProposal.objective += ' ' + line;
+    } else if (currentSection === "Budget") {
+      if (line !== "") {
+        newProposal.objective += " " + line;
       }
     }
-  } 
+  }
 
   // 9. Validation: Ensure essential fields are present
   if (!newProposal.title) {
@@ -146,23 +182,31 @@ function parseProposal(proposalText, agent) {
     console.warn("Warning: Proposal is missing Expected Impact points.");
   }
 
-  
-  if (newProposal.title && newProposal.objective && newProposal.expectedImpact.length > 0) {
+  if (
+    newProposal.title &&
+    newProposal.objective &&
+    newProposal.expectedImpact.length > 0
+  ) {
     // 10. Optional: Remove the last proposal if it's still pending (to avoid duplicates)
-    if (policies.length > 0 && policies[policies.length - 1].status !== "Rejected" && policies[policies.length - 1].status  !== "Passed") {
+    if (
+      policies.length > 0 &&
+      policies[policies.length - 1].status !== "Rejected" &&
+      policies[policies.length - 1].status !== "Passed"
+    ) {
       policies.pop();
       newProposal.index -= 1;
     }
 
     policies.push(newProposal);
-
   } else {
-    console.warn("Proposal parsing incomplete. Please ensure all sections are present.");
+    console.warn(
+      "Proposal parsing incomplete. Please ensure all sections are present.",
+    );
   }
 }
 
 function drawRecentPassedPolicies(policies) {
-  let passedPolicies = policies.filter(p => p.status === "Passed");
+  let passedPolicies = policies.filter((p) => p.status === "Passed");
   passedPolicies = passedPolicies.slice(-3);
   textFont("Arial");
   textAlign(LEFT, TOP);
@@ -175,14 +219,14 @@ function drawRecentPassedPolicies(policies) {
 
   for (let i = 0; i < passedPolicies.length; i++) {
     let policy = passedPolicies[i];
-    
+
     textStyle(NORMAL);
 
     let titleHeight = textHeight(policy.title, cardWidth - 20);
     let objectiveHeight = textHeight(policy.objective, cardWidth - 20);
     let impactsHeight = policy.expectedImpact.reduce(
       (acc, impact) => acc + textHeight(impact, cardWidth - 40),
-      0
+      0,
     );
     let cardHeight = 100 + titleHeight + objectiveHeight + impactsHeight;
 
@@ -203,7 +247,7 @@ function drawRecentPassedPolicies(policies) {
     textSize(18);
     textStyle(BOLD);
     drawWrappedText(policy.title, x + 10, y + 10, cardWidth - 20); // Wrapped title/
-   
+
     fill(0);
     textSize(16);
     textStyle(BOLD);
@@ -220,7 +264,7 @@ function drawRecentPassedPolicies(policies) {
         `- ${policy.expectedImpact[j]}`,
         x + 20,
         impactsY,
-        cardWidth - 40
+        cardWidth - 40,
       );
     }
     y += cardHeight + spacing;
@@ -231,7 +275,7 @@ function drawRecentPassedPolicies(policies) {
   textSize(20);
   textStyle(BOLDITALIC);
   textAlign(LEFT);
-  text("Recent Passed Policies", x + 80, 20);
+  text("Recent Passed Policies", x + 50, 20);
 }
 
 function textHeight(txt, wrapWidth) {

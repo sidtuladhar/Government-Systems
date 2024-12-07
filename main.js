@@ -19,7 +19,9 @@ function preload() {
 function setup() {
   createCanvas(3700, 1200);
 
-  policyPos = createVector(LegislativeAgents[LegislativeAgents[0].x, LegislativeAgents[0].y]);
+  policyPos = createVector(
+    LegislativeAgents[(LegislativeAgents[0].x, LegislativeAgents[0].y)],
+  );
 
   initializeAgents(LegislativeAgents);
   startDebate(LegislativeAgents[0]);
@@ -29,22 +31,21 @@ function setup() {
 
 function draw() {
   background(curBackground);
-  
+
   drawRecentPassedPolicies(policies);
   textFont(curFont);
   drawProposal();
-  
+
   if (stage === "Legislative-Debate" || stage === "Legislative-Vote") {
     drawAgents(LegislativeAgents);
   } else if (stage === "Executive-Debate" || stage === "Executive-Vote") {
     drawAgents(ExecutiveAgents);
   } else if (stage === "Judicial-Debate" || stage === "Judicial-Vote") {
     drawAgents(JudicialAgent);
-  } 
+  }
 
   imageMode(CENTER);
   image(policyImage, policyPos.x + 25, policyPos.y - 10, 40, 40);
-
 
   if (isAnimating) {
     animatePolicy();
@@ -55,16 +56,14 @@ function draw() {
     if (transitionComplete) {
       updateBackground = null; // Stop calling once transition is done
       if (stage === "Judicial-Debate") {
-        curBackground = '#4169E1';
+        curBackground = "#4169E1";
       } else if (stage === "Executive-Debate") {
-        curBackground = '#228B22'; 
+        curBackground = "#228B22";
       } else if (stage === "Legislative-Debate") {
         curBackground = "#A9A9A9";
       }
     }
   }
-
-
 }
 
 function respondToProposal(agents) {
@@ -84,12 +83,14 @@ function respondToProposal(agents) {
         }
       }
       if (agree >= 3) {
-        updateBackground = smoothBackgroundTo('#A9A9A9', '#228B22', 2000);
+        updateBackground = smoothBackgroundTo("#A9A9A9", "#228B22", 2000);
         policies[policies.length - 1].status = "Pending Executive Decision";
         stage = "Executive-Debate";
         currentTurn = 0;
         maxTurns = 1;
-        policyPos = createVector(ExecutiveAgents[ExecutiveAgents[0].x, ExecutiveAgents[0].y]);
+        policyPos = createVector(
+          ExecutiveAgents[(ExecutiveAgents[0].x, ExecutiveAgents[0].y)],
+        );
         initializeAgents(ExecutiveAgents);
       } else {
         policies[policies.length - 1].status = "Rejected";
@@ -101,18 +102,22 @@ function respondToProposal(agents) {
         startDebate(LegislativeAgents[0]);
       }
     } else if (stage === "Executive-Debate") {
-      let decision = doesAgentAgree(ExecutiveAgents[ExecutiveAgents.length - 1]);
+      let decision = doesAgentAgree(
+        ExecutiveAgents[ExecutiveAgents.length - 1],
+      );
       if (decision) {
         console.log("Last Stage");
-        updateBackground = smoothBackgroundTo('#228B22', '#4169E1', 2000);
+        updateBackground = smoothBackgroundTo("#228B22", "#4169E1", 2000);
         policies[policies.length - 1].status = "Pending Judicial Decision";
         stage = "Judicial-Debate";
         currentTurn = 0;
         maxTurns = 1;
-        policyPos = createVector(JudicialAgent[JudicialAgent[0].x, JudicialAgent[0].y]);
+        policyPos = createVector(
+          JudicialAgent[(JudicialAgent[0].x, JudicialAgent[0].y)],
+        );
         initializeAgents(JudicialAgent);
       } else {
-        updateBackground = smoothBackgroundTo('#228B22', '#A9A9A9', 2000);
+        updateBackground = smoothBackgroundTo("#228B22", "#A9A9A9", 2000);
         policies[policies.length - 1].status = "Rejected";
         stage = "Legislative-Debate";
         currentTurn = 0;
@@ -126,7 +131,6 @@ function respondToProposal(agents) {
       if (decision) {
         console.log("Done");
         policies[policies.length - 1].status = "Passed";
-        
       } else {
         console.log("Failed");
       }
@@ -149,12 +153,12 @@ function respondToProposal(agents) {
   let agent = agents[agentIndex];
   // console.log(currentTurn, maxTurns, agents.length, agent);
   const budgetInfo = policies[policies.length - 1].budget
-  ? `${policies[policies.length - 1].budget}`
-  : "Not specified";
+    ? `${policies[policies.length - 1].budget}`
+    : "Not specified";
 
   if (policies.length === 0) {
     console.log("NO POLICY");
-  } else if (stage === "Legislative-Debate"){
+  } else if (stage === "Legislative-Debate") {
     agent.messages.push({
       role: "user",
       content: `You represent ${agent.party} ${agent.name}. This is the current proposal at hand:
@@ -175,7 +179,7 @@ function respondToProposal(agents) {
       Then if you want to make amends to it, give numerical details and start with **Proposal**. If you agree with most of it, DO NOT AMEND.`,
     });
   } else if (stage === "Legislative-Vote") {
-     agent.messages.push({
+    agent.messages.push({
       role: "user",
       content: `You represent ${agent.part} ${agent.name}. This is the current proposal at hand:
           
@@ -190,12 +194,13 @@ function respondToProposal(agents) {
       ${policies[policies.length - 1].expectedImpact[1]}
       ${policies[policies.length - 1].expectedImpact[2]}
       
-      We are now at a voting stage. If you agree to the current proposal, say "I vote for the proposal. ✅"  If you do not, say "I vote against the proposal. ❌"` }); 
+      We are now at a voting stage. If you agree to the current proposal, say "I vote for the proposal. ✅"  If you do not, say "I vote against the proposal. ❌"`,
+    });
   } else if (stage === "Executive-Debate") {
-      if (agent.role === "President") {
-        agent.messages.push({
-          role: "user",
-          content: `You represent ${agent.name}. We are currently in the Executive Committee. This is the current proposal at hand:
+    if (agent.role === "President") {
+      agent.messages.push({
+        role: "user",
+        content: `You represent ${agent.name}. We are currently in the Executive Committee. This is the current proposal at hand:
               
           **Title**
           ${policies[policies.length - 1].title}
@@ -213,12 +218,12 @@ function respondToProposal(agents) {
           
           According to your role, give your opinion on the proposal and be specific (20 words or less). After your opinion respond with:
            
-          'I believe this proposal will benefit our country, I approve this proposal ✅' or 'This proposal is not suitable. I veto this proposal ❌'`
-        }); 
-      } else {
+          'I believe this proposal will benefit our country, I approve this proposal ✅' or 'This proposal is not suitable. I veto this proposal ❌'`,
+      });
+    } else {
       agent.messages.push({
-          role: "user",
-          content: `You represent ${agent.name}. We are currently in the Executive Committee. This is the current proposal at hand:
+        role: "user",
+        content: `You represent ${agent.name}. We are currently in the Executive Committee. This is the current proposal at hand:
               
           **Title**
           ${policies[policies.length - 1].title}
@@ -234,13 +239,13 @@ function respondToProposal(agents) {
           **Budget**
           ${budgetInfo}
           
-          Do what you have to do according to your role.`
-      }); 
+          Do what you have to do according to your role.`,
+      });
     }
-  } else if (stage === "Judicial-Debate"){
-         agent.messages.push({
-            role: "user",
-            content: `You represent ${agent.name}. This is the current proposal at hand:
+  } else if (stage === "Judicial-Debate") {
+    agent.messages.push({
+      role: "user",
+      content: `You represent ${agent.name}. This is the current proposal at hand:
               
             **Title**
             ${policies[policies.length - 1].title}
@@ -258,8 +263,8 @@ function respondToProposal(agents) {
 
             According to your role, give your opinion on the proposal first and be specific (30 words or less). After giving your opinion respond with:
             
-            'This proposal is CONSTITUTIONAL and aligns with the principles of fairness and legality. ✅' or 'This proposal is UNCONSTITUTIONAL. Our court system must do better. ❌'`
-         });
+            'This proposal is CONSTITUTIONAL and aligns with the principles of fairness and legality. ✅' or 'This proposal is UNCONSTITUTIONAL. Our court system must do better. ❌'`,
+    });
   }
   sendMessages(agent);
   currentTurn++;
@@ -273,7 +278,7 @@ function sendMessages(agent) {
     temperature: 0.8,
   };
   requestOAI("POST", "/v1/chat/completions", params, (results, params) =>
-    gotResults(results, params, agent)
+    gotResults(results, params, agent),
   );
 }
 
@@ -283,7 +288,7 @@ function gotResults(results, params, agent) {
   targetPos = createVector(agent.x, agent.y);
   isAnimating = true;
   animationProgress = 0;
-  
+
   parseProposal(resultMessage, agent);
 
   agent.messages.push({
@@ -296,26 +301,26 @@ function gotResults(results, params, agent) {
 
   if (stage === "Legislative-Debate" || stage === "Legislative-Vote") {
     setTimeout(() => {
-        for (let otherAgent of LegislativeAgents) {
-          if (otherAgent !== agent) {
-            otherAgent.messages.push({
+      for (let otherAgent of LegislativeAgents) {
+        if (otherAgent !== agent) {
+          otherAgent.messages.push({
             role: "system",
             content: `${agent.name} said: "${resultMessage}"`,
-            });
-          }
+          });
         }
+      }
       respondToProposal(LegislativeAgents);
     }, 2000);
   } else if (stage === "Executive-Debate") {
     setTimeout(() => {
-        for (let otherAgent of ExecutiveAgents) {
-          if (otherAgent !== agent) {
-            otherAgent.messages.push({
+      for (let otherAgent of ExecutiveAgents) {
+        if (otherAgent !== agent) {
+          otherAgent.messages.push({
             role: "system",
             content: `${agent.name} said: "${resultMessage}"`,
-            });
-          }
+          });
         }
+      }
       respondToProposal(ExecutiveAgents);
     }, 7000);
   } else if (stage === "Judicial-Debate") {

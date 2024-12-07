@@ -3,7 +3,7 @@ let LegislativeAgents = [
     name: "Republican Leader",
     role: "Leader",
     party: "Republican",
-    x: 1200,
+    x: 800,
     y: 470,
     messages: [],
     col: "red",
@@ -15,7 +15,7 @@ let LegislativeAgents = [
     name: "Democratic Leader",
     role: "Leader",
     party: "Democrat",
-    x: 625,
+    x: 225,
     y: 470,
     messages: [],
     col: "blue",
@@ -27,7 +27,7 @@ let LegislativeAgents = [
     name: "Republican Legislator",
     role: "Legislator",
     party: "Republican",
-    x: 1200,
+    x: 800,
     y: 700,
     messages: [],
     col: "red",
@@ -39,7 +39,7 @@ let LegislativeAgents = [
     name: "Democratic Legislator",
     role: "Legislator",
     party: "Democrat",
-    x: 625,
+    x: 225,
     y: 700,
     messages: [],
     col: "blue",
@@ -51,7 +51,7 @@ let LegislativeAgents = [
     name: "Independent Legislator",
     role: "Swing Legislator",
     party: "Independent",
-    x: 925,
+    x: 525,
     y: 850,
     messages: [],
     col: "gray",
@@ -66,7 +66,7 @@ let ExecutiveAgents = [
     name: "Defense Advisor",
     role: "Defense",
     party: "Republican",
-    x: 1200,
+    x: 800,
     y: 450,
     messages: [],
     col: "brown",
@@ -78,7 +78,7 @@ let ExecutiveAgents = [
     name: "Economic Advisor",
     role: "Economy",
     party: "Republican",
-    x: 600,
+    x: 200,
     y: 450,
     messages: [],
     col: "yellow",
@@ -90,7 +90,7 @@ let ExecutiveAgents = [
     name: "President",
     role: "President",
     party: "Republican",
-    x: 900,
+    x: 500,
     y: 450,
     messages: [],
     col: "#36454F",
@@ -98,29 +98,29 @@ let ExecutiveAgents = [
     currentCharIndex: 0,
     lastUpdateTime: 0,
   },
-]
+];
 
 let JudicialAgent = [
   {
     name: "Supreme Court Judge",
     role: "Judge",
     party: "Independent",
-    x: 900,
+    x: 500,
     y: 500,
     messages: [],
     col: "purple",
     displayedContent: "",
     currentCharIndex: 0,
     lastUpdateTime: 0,
-  }
-]
+  },
+];
 
 function initializeAgents(agents) {
   for (let agent of agents) {
     if (agent.role === "Leader") {
-        agent.messages.push({
-          role: "system",
-          content: `You are the ${agent.name} in the United States.
+      agent.messages.push({
+        role: "system",
+        content: `You are the ${agent.name} in the United States.
 
           Your role:
           - CREATE a policy proposal using the specified format.
@@ -146,11 +146,11 @@ function initializeAgents(agents) {
           - Impact 1
           - Impact 2
           - Impact 3`,
-        });
+      });
     } else if (agent.role === "Legislator") {
-        agent.messages.push({
-          role: "system",
-          content: `You are an AI that represents a ${agent.party} ${agent.role} in the United States.
+      agent.messages.push({
+        role: "system",
+        content: `You are an AI that represents a ${agent.party} ${agent.role} in the United States.
 
           Your role:
           - VOTE on policy proposals based on Republican values and personal priorities.
@@ -176,11 +176,11 @@ function initializeAgents(agents) {
           - Impact 1
           - Impact 2
           - Impact 3`,
-        });
+      });
     } else if (agent.role === "Swing Legislator") {
       agent.messages.push({
         role: "system",
-          content: `You are an AI that represents a ${agent.role} in the United States.
+        content: `You are an AI that represents a ${agent.role} in the United States.
 
           Your role:
           - VOTE on policy proposals for either the Republicans or Democrats based on their arguments. 
@@ -190,10 +190,10 @@ function initializeAgents(agents) {
           - Be impartial as best as you can.
           - Do not ammend the proposal. Only give your opinion.`,
       });
-    }  else if (agent.role === "President") {
+    } else if (agent.role === "President") {
       agent.messages.push({
         role: "system",
-          content: `You are an AI that represents the ${agent.role} in the United States.
+        content: `You are an AI that represents the ${agent.role} in the United States.
 
           Your role:
           - APPROVE or VETO policy proposals based on overall national priorities.
@@ -208,10 +208,10 @@ function initializeAgents(agents) {
           - Impact 2
           - Impact 3`,
       });
-    }  else if (agent.role === "Defense") {
+    } else if (agent.role === "Defense") {
       agent.messages.push({
         role: "system",
-          content: `You are an AI that represents a ${agent.role} in the United States. You must be strict and aggressive with your words.
+        content: `You are an AI that represents a ${agent.role} in the United States. You must be strict and aggressive with your words.
 
           Your role:
           - Provide risk assessments related to the proposal.
@@ -223,12 +223,12 @@ function initializeAgents(agents) {
           ‼️‼️MEDIUM RISK‼️ ‼️
           ‼️‼️‼️HIGH RISK‼️‼️‼️
 
-          Then give your reason for the risk. (20 words or less)`
+          Then give your reason for the risk. (20 words or less)`,
       });
-    }  else if (agent.role === "Economy") {
+    } else if (agent.role === "Economy") {
       agent.messages.push({
         role: "system",
-          content: `You are an AI that represents a ${agent.role} in the United States.
+        content: `You are an AI that represents a ${agent.role} in the United States.
 
           Your role:
           - Assess the economic feasibility and impact of the policy.
@@ -247,7 +247,7 @@ function initializeAgents(agents) {
     } else if (agent.role === "Judge") {
       agent.messages.push({
         role: "system",
-          content: `You are an AI that represents the ${agent.role} in the United States. You make the final decision whether a proposal passes or not.
+        content: `You are an AI that represents the ${agent.role} in the United States. You make the final decision whether a proposal passes or not.
 
           Your role:
           - Strictly evaluate the current policy for its fairness, legality, and ethical implications.
@@ -255,8 +255,8 @@ function initializeAgents(agents) {
 
           Guidelines:
           - Remain neutral and focus on long-term impacts and fairness.
-          - Use court language while giving your feedback and making your final decision.`
-       });
+          - Use court language while giving your feedback and making your final decision.`,
+      });
     }
   }
   if (stage === "Executive-Debate") {
@@ -295,19 +295,19 @@ function resetSystem() {
   }
   for (let agent of ExecutiveAgents) {
     agent.messages = [];
-  } 
+  }
   for (let agent of JudicialAgent) {
     agent.messages = [];
   }
   let newProposal = {
-      index: policies.length + 1, // Unique identifier
-      title: "",
-      objective: "",
-      party: "",
-      expectedImpact: [],
-      budget: "",
-      status: "Pending Legislative Decision", // Possible values: "Pending", "Passed", "Rejected"
-   };
+    index: policies.length + 1, // Unique identifier
+    title: "",
+    objective: "",
+    party: "",
+    expectedImpact: [],
+    budget: "",
+    status: "Pending Legislative Decision", // Possible values: "Pending", "Passed", "Rejected"
+  };
 
   policies.push(newProposal);
 }
