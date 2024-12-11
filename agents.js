@@ -63,18 +63,6 @@ let LegislativeAgents = [
 
 let ExecutiveAgents = [
   {
-    name: "Defense Advisor",
-    role: "Defense",
-    party: "Republican",
-    x: 700,
-    y: 650,
-    messages: [],
-    col: "brown",
-    displayedContent: "",
-    currentCharIndex: 0,
-    lastUpdateTime: 0,
-  },
-  {
     name: "Economic Advisor",
     role: "Economy",
     party: "Republican",
@@ -82,6 +70,18 @@ let ExecutiveAgents = [
     y: 650,
     messages: [],
     col: "yellow",
+    displayedContent: "",
+    currentCharIndex: 0,
+    lastUpdateTime: 0,
+  },
+  {
+    name: "Defense Advisor",
+    role: "Defense",
+    party: "Republican",
+    x: 700,
+    y: 650,
+    messages: [],
+    col: "brown",
     displayedContent: "",
     currentCharIndex: 0,
     lastUpdateTime: 0,
@@ -136,6 +136,7 @@ function initializeAgents(agents) {
           - Provide clear and concise reasoning.
           - Respond with 1 sentence per section. (STRICT)
           - Remember that you can be convinced.
+          - Remember to propose policies on topics that haven't been discussed previously
 
           Please generate your response in the following format:
 
@@ -184,7 +185,7 @@ function initializeAgents(agents) {
 
           Your role:
           - VOTE on policy proposals for either the Republicans or Democrats based on their arguments. 
-          - CONVINCE all the other legislators to disagree to the proposal. Any message you say will be communicated to all of them.
+          - CONVINCE all the other legislators to agree to the proposal. Any message you say will be communicated to all of them.
 
           Guidelines:
           - Be impartial as best as you can.

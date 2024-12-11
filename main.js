@@ -311,11 +311,11 @@ function sendMessages(agent) {
     temperature: 0.8,
   };
   requestOAI("POST", "/v1/chat/completions", params, (results, params) =>
-    gotResults(results, params, agent),
+    gotResults(results, agent),
   );
 }
 
-function gotResults(results, params, agent) {
+function gotResults(results, agent) {
   let resultMessage = results.choices[0].message.content.trim();
   console.log(`Received from ${agent.name}: ${resultMessage}`);
   targetPos = createVector(agent.x, agent.y);
@@ -359,6 +359,6 @@ function gotResults(results, params, agent) {
   } else if (stage === "Judicial-Debate") {
     setTimeout(() => {
       respondToProposal(JudicialAgent);
-    }, 10000);
+    }, 12000);
   }
 }

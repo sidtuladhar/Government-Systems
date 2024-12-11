@@ -242,7 +242,7 @@ function drawRecentPassedPolicies(policies) {
     // Header with title
     fill("#2A4D69"); // Dark blue
     noStroke();
-    rect(x, y, cardWidth, 40, 10, 10, 0, 0); // Header background
+    rect(x, y, cardWidth, 45, 10, 10, 0, 0); // Header background
     fill(255); // White text
     textSize(18);
     textStyle(BOLD);
